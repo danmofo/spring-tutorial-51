@@ -18,11 +18,13 @@
 	<security:http use-expressions="true">
 		<security:intercept-url pattern="/offers/create"			access="isAuthenticated()" />
 		<security:intercept-url pattern="/offers/edit/*"			access="isAuthenticated()" />
+		<security:intercept-url pattern="/login"			access="permitAll" />
 		<security:intercept-url pattern="/offers/view/*"			access="permitAll" />
 		<security:intercept-url pattern="/offers/list"				access="permitAll" />
 		<security:intercept-url pattern="/" 						access="permitAll" />
 		<security:intercept-url pattern="/s/*" 						access="permitAll" />
 		<security:intercept-url pattern="/**" 						access="denyAll" />
-		<security:form-login />
+		<security:form-login login-page="/login"
+			authentication-failure-url="/login?error=a" />
 	</security:http>
 </beans>
