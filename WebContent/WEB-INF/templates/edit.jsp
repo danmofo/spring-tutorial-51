@@ -6,6 +6,7 @@
 	<%@include file="/WEB-INF/templates/common/styles.jsp" %>
 </head>
 <body>
+	<%@include file="/WEB-INF/templates/common/nav.jsp" %>
 	<div class="container">
 		<c:choose>
 			<c:when test="${empty offer}">

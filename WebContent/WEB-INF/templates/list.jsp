@@ -6,6 +6,7 @@
 	<%@include file="/WEB-INF/templates/common/styles.jsp" %>
 </head>
 <body>
+	<%@include file="/WEB-INF/templates/common/nav.jsp" %>
 	<div class="container">
 		<h1>List page</h1>
 		<p>
