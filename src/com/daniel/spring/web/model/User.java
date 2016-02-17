@@ -1,34 +1,24 @@
 package com.daniel.spring.web.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class User {
 	
-	private int id;
-	private String name;
-	private String email;
+	@Size(min=1, message="Username must be at least {min} characters long.")
+	private String username;
+	
+	@Size(min=3, max=20, message="Password must be between {min} and {max} characters long.")
 	private String password;
+	
+	private boolean enabled = true;
 
-	public int getId() {
-		return id;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
+	public String getUsername() {
+		return username;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -39,17 +29,23 @@ public class User {
 		this.password = password;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("User [id=");
-		builder.append(id);
-		builder.append(", name=");
-		builder.append(name);
-		builder.append(", email=");
-		builder.append(email);
+		builder.append("User [username=");
+		builder.append(username);
 		builder.append(", password=");
 		builder.append(password);
+		builder.append(", enabled=");
+		builder.append(enabled);
 		builder.append("]");
 		return builder.toString();
 	}

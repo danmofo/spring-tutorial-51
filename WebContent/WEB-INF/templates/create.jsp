@@ -1,13 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="spring"
-	uri="http://www.springframework.org/tags/form"%>
+<%@include file="/WEB-INF/templates/common/taglibs.jsp" %>
 <html>
 <head>
-<c:import url="/WEB-INF/templates/common/includes.jsp"></c:import>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Home</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title></title>
+	<%@include file="/WEB-INF/templates/common/styles.jsp" %>
 </head>
 <body>
 	<div class="container">
@@ -18,7 +14,6 @@
 				<label>Name: </label>
 				<spring:input path="name" placeholder="" cssClass="form-control"
 					type="text" />
-				<br />
 				<spring:errors path="name" cssClass="alert alert-danger"></spring:errors>
 			</div>
 
@@ -26,7 +21,6 @@
 				<label>Email: </label>
 				<spring:input path="email" placeholder="" cssClass="form-control"
 					type="text" />
-				<br />
 				<spring:errors path="email" cssClass="alert alert-danger"></spring:errors>
 			</div>
 
@@ -34,7 +28,6 @@
 				<label>Text: </label>
 				<spring:input path="text" placeholder="" cssClass="form-control"
 					type="text" />
-				<br />
 				<spring:errors path="text" cssClass="alert alert-danger"></spring:errors>
 			</div>
 

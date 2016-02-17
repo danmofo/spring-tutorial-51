@@ -1,13 +1,15 @@
 package com.daniel.spring.web.model;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+
 import javax.validation.constraints.Size;
 
 import com.daniel.spring.web.validator.ValidEmail;
 
-public class Offer {
-	
+public class Offer implements Serializable {
+
+	private static final long serialVersionUID = 8793424968085115667L;
+
 	private int id;
 	
 	@Size(min=3, max=13, message="Name must be between {min} and {max} characters.")

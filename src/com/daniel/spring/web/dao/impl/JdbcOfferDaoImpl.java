@@ -87,7 +87,6 @@ public class JdbcOfferDaoImpl implements OfferDao {
 		return offers.size() == 0 ? null : offers.get(0);
 	}
 
-	@Override
 	public Offer retrieveUnsafe(int id) {
 		MapSqlParameterSource params = new MapSqlParameterSource("id", id);
 		
