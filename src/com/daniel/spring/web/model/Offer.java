@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Size;
 
-import com.daniel.spring.web.validator.ValidEmail;
+import org.hibernate.validator.constraints.Email;
 
 public class Offer implements Serializable {
 
@@ -15,7 +15,7 @@ public class Offer implements Serializable {
 	@Size(min=3, max=13, message="Name must be between {min} and {max} characters.")
 	private String name;
 	
-	@ValidEmail(message="Must be a really valid email address mate.")
+	@Email(message="Must be a really valid email address mate.")
 	private String email;
 	
 	@Size(min=10, message="Must be at least {min} characters.")
