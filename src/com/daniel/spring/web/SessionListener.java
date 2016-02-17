@@ -3,6 +3,8 @@ package com.daniel.spring.web;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+
+//asd
 public class SessionListener implements HttpSessionListener{
 
 	@Override
