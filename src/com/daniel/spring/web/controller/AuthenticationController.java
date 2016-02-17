@@ -40,7 +40,7 @@ public class AuthenticationController {
 			return "create-account";
 		}
 		
-		System.out.println(user);
+		userService.add(user);
 		return "create-account";
 	}
 	
