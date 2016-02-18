@@ -1,13 +1,13 @@
 package com.daniel.spring.web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import com.daniel.spring.web.dao.CrudDao;
 import com.daniel.spring.web.dao.impl.JdbcUserDaoImpl;
+import com.daniel.spring.web.model.Role;
 import com.daniel.spring.web.model.User;
 
-@Component("userService")
+@Service("userService")
 public class UserService {
 
 	private JdbcUserDaoImpl dao;
@@ -17,8 +17,13 @@ public class UserService {
 		this.dao = dao;
 	}
 	
-	public boolean add(User user) {
-		return dao.add(user);
+	public void add(User user) {
+		dao.add(user);
+	}
+	
+	public void addAdmin(User user) {
+		user.setAuthority(Role.ADMIN);
+		dao.add(user);
 	}
 	
 	public boolean update(User user) {

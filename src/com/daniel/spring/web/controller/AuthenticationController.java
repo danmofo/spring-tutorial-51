@@ -26,7 +26,7 @@ public class AuthenticationController {
 	public String login() {
 		return "login";
 	}
-	
+		
 	@RequestMapping(value="/register", method=RequestMethod.GET)
 	public String createAccount(Model m) {
 		m.addAttribute("user", new User());
@@ -36,11 +36,20 @@ public class AuthenticationController {
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public String handleCreateAccount(@Valid User user, BindingResult result, Model m) {
 		
+		// Standard field validation
 		if(result.hasErrors()) {
 			return "create-account";
 		}
+				
+		// Check if the username exists already
+		if(userService.getById(user.getUsername()) != null) {
+			result.rejectValue("username", "DuplicateKey.user.username");
+			return "create-account";
+		}
 		
-		userService.add(user);
+		// Safe to add
+		userService.addAdmin(user);
+
 		return "create-account";
 	}
 	

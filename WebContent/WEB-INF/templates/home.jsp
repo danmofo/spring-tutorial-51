@@ -9,7 +9,6 @@
 	<%@include file="/WEB-INF/templates/common/nav.jsp" %>
 	<div class="container">
 		<h1>Home</h1>
-		<p>Hello ${name}</p>
 		<p>This is the homepage. Here are the latest 5 offers:</p>
 		<table class="table">
 			<tr>

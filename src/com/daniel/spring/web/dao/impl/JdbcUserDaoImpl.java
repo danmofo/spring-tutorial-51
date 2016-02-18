@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.daniel.spring.web.dao.CrudDao;
 import com.daniel.spring.web.model.User;
@@ -22,26 +23,28 @@ public class JdbcUserDaoImpl implements CrudDao<User, String>{
 	public void setDataSource(DataSource dataSource) {
 		this.jdbc = new NamedParameterJdbcTemplate(dataSource);
 	}
-
+	
+	@Transactional
 	@Override
-	public boolean add(User user) {
+	public void add(User user) {
 		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(user);
+		MapSqlParameterSource params2 = new MapSqlParameterSource();
+		params2.addValue("authority", user.getAuthority().getStringRepresentation());
+		params2.addValue("username", user.getUsername());
 		
-		return this.jdbc.update("insert into users (username, password) values (:username, :password)", params) == 1;
-	}
-
-	@Override
-	public int[] addAll(List<User> models) {
-		return null;
+		// These will throw runtime exceptions if something goes wrong regardless
+		jdbc.update("insert into users (username, password, email) values (:username, :password, :email)", params);
+		jdbc.update("insert into authorities (username, authority) values (:username, :authority)", params2);
+		
 	}
 
 	@Override
 	public User retrieve(String username) {
 		MapSqlParameterSource params = new MapSqlParameterSource("username", username);
 		
-		List<User> user = this.jdbc.query("select * from username where username = :username", params, new UserRowMapperImpl());
+		List<User> user = this.jdbc.query("select * from users where username = :username", params, new UserRowMapperImpl());
 		
-		return user.size() == 0 ? user.get(0) : null;
+		return user.size() != 0 ? user.get(0) : null;
 		
 	}
 

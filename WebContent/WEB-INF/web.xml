@@ -44,4 +44,13 @@
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  <filter>
+    <display-name>MessageFilter</display-name>
+    <filter-name>MessageFilter</filter-name>
+    <filter-class>com.daniel.spring.web.filter.MessageFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>MessageFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 </web-app>

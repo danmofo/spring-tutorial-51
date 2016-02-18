@@ -18,7 +18,14 @@
 		<property name="suffix" value=".jsp"></property>
 	</bean>
 	
+	
+	
 	<mvc:resources location="/WEB-INF/resources/styles/"
 		mapping="/s/**">
 	</mvc:resources>
+	
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+	<property name="basename" value="/WEB-INF/messages"></property>
+	</bean>
 </beans>

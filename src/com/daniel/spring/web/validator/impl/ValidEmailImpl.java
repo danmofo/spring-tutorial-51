@@ -7,6 +7,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 
 import com.daniel.spring.web.validator.ValidEmail;
 
+@Deprecated
 public class ValidEmailImpl implements ConstraintValidator<ValidEmail, String> {
 
 	private int min;
