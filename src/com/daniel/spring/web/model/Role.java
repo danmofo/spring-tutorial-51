@@ -1,16 +1,13 @@
 package com.daniel.spring.web.model;
 
 public enum Role {
-	USER("ROLE_USER"),
-	ADMIN("ROLE_ADMIN");
+	ROLE_USER,
+	ROLE_ADMIN;
 	
-	private String stringRepresentation;
+	public static void main(String[] args) {
 	
-	Role(String stringRepresentation) {
-		this.stringRepresentation = stringRepresentation;
-	}
-	
-	public String getStringRepresentation() {
-		return stringRepresentation;
+		System.out.println(Role.ROLE_USER.toString());
+		System.out.println(Role.valueOf("ROLE_USER"));
+		
 	}
 }

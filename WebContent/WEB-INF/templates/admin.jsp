@@ -9,7 +9,7 @@
 	<%@include file="/WEB-INF/templates/common/nav.jsp" %>
 	<div class="container">
 		<h1>Admin</h1>
-		<p>This is the admin area</p>
+		<p>This is the admin area.</p>
 	</div>
 </body>
 </html>

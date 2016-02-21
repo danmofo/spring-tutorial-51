@@ -15,7 +15,7 @@ public class User {
 	@Email
 	private String email;
 		
-	private Role authority = Role.USER;
+	private Role authority = Role.ROLE_USER;
 	
 	private boolean enabled = true;
 	

@@ -1,5 +1,7 @@
 package com.daniel.spring.web.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,16 @@ public class UserService {
 		this.dao = dao;
 	}
 	
+	public List<User> getAll() {
+		return dao.list();
+	}
+	
 	public void add(User user) {
 		dao.add(user);
 	}
 	
 	public void addAdmin(User user) {
-		user.setAuthority(Role.ADMIN);
+		user.setAuthority(Role.ROLE_ADMIN);
 		dao.add(user);
 	}
 	

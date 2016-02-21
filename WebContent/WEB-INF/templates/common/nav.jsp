@@ -16,13 +16,11 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="/offers/list">List <span class="sr-only">(current)</span></a></li>
         <li><a href="/offers/create">Create</a></li>
-        <sec:authorize access="hasRole('ADMIN')">
-        	<li><a href="/admin/home">Admin</a></li>
-        </sec:authorize>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/register">Create account</a></li>
+        
         <sec:authorize access="!isAuthenticated()">
+        	<li><a href="/register">Create account</a></li>
         	<li><a href="/login">Log in</a></li>
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
@@ -33,16 +31,29 @@
 		        </form>
 		    </li>
         </sec:authorize>
-        
-        
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
+<sec:authorize access="hasRole('ADMIN')">
+<nav class="navbar navbar-default">
+  <div class="container">
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+      	<li><a href="/admin/home">Admin</a></li>
+        <li><a href="/admin/users">Manage users <span class="sr-only">(current)</span></a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+</sec:authorize>
 
 <!-- Global messages -->
 <c:if test="${not empty message}">
 	<div class="container">
 		<springTags:message code="${message}"></springTags:message>
 	</div>
-</c:if>	
+</c:if>
