@@ -3,6 +3,7 @@ package com.daniel.spring.web.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import com.daniel.spring.web.dao.impl.JdbcUserDaoImpl;
@@ -19,7 +20,9 @@ public class UserService {
 		this.dao = dao;
 	}
 	
+	@Secured("ROLE_ADMIN")
 	public List<User> getAll() {
+		System.out.println("Not so secure..");
 		return dao.list(10);
 	}
 	

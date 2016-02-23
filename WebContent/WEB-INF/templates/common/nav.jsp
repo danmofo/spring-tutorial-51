@@ -36,7 +36,7 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-<sec:authorize access="hasRole('ADMIN')">
+<sec:authorize access="isAuthenticated()">
 <nav class="navbar navbar-default">
   <div class="container">
 
