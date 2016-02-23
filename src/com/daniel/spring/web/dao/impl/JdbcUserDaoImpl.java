@@ -53,15 +53,17 @@ public class JdbcUserDaoImpl implements CrudDao<User, String>{
 		
 	}
 
+	// Using shortened BeanPropertyRowMapper.newInstance
 	@Override
 	public List<User> list(int limit) {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println("Using list(int limit)");
+		return this.jdbc.query("select u.username, u.enabled, u.email, a.authority from users u inner join authorities a on a.username = u.username", BeanPropertyRowMapper.newInstance(User.class));
 	}
 
+	// Equivalent of the above, manually mapping rows
 	@Override
 	public List<User> list() {
-		List<User> users = this.jdbc.query("select u.username, u.enabled, u.email, a.authority from users u inner join authorities a on a.username = u.username", new RowMapper<User>() {
+		List<User> users = this.jdbc.query("select u.username, u.enabled, u.email, a.authority from users u inner join authorities a on a.username = u.username order by u.enabled desc", new RowMapper<User>() {
 
 			@Override
 			public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -83,13 +85,12 @@ public class JdbcUserDaoImpl implements CrudDao<User, String>{
 	public boolean update(User user) {
 		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(user);
 		
-		return this.jdbc.update("update users set username=:username, password=:password, enabled=:enabled where id=:id", params) == 1;
+		return this.jdbc.update("update users set username=:username, password=:password, enabled=:enabled where username=:username", params) == 1;
 	}
 
 	@Override
-	public boolean delete() {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean delete(User user) {
+		return update(user);
 	}
 
 }

@@ -54,6 +54,8 @@
 <!-- Global messages -->
 <c:if test="${not empty message}">
 	<div class="container">
-		<springTags:message code="${message}"></springTags:message>
+		<div class="alert alert-info">
+			<springTags:message code="${message}"></springTags:message>
+		</div>
 	</div>
 </c:if>

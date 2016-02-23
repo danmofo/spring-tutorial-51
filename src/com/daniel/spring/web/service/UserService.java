@@ -20,7 +20,7 @@ public class UserService {
 	}
 	
 	public List<User> getAll() {
-		return dao.list();
+		return dao.list(10);
 	}
 	
 	public void add(User user) {
@@ -38,5 +38,9 @@ public class UserService {
 	
 	public User getById(String username) {
 		return dao.retrieve(username);
+	}
+	
+	public boolean deactivate(User user) {
+		return dao.update(user);
 	}
 }

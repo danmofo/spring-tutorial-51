@@ -1,8 +1,12 @@
 package com.daniel.spring.web.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -22,15 +26,40 @@ public class AdminController {
 	
 	@RequestMapping(value="/home", method=RequestMethod.GET)
 	public String home() {
-		return "admin";
+		return "/admin/home";
 	}
 	
 	@RequestMapping(value="/users", method=RequestMethod.GET)
 	public String listUsers(Model m) {
 		m.addAttribute("users", userService.getAll());
-		for(User user : userService.getAll()) {
-			System.out.println(user);
+		return "/admin/list-users";
+	}
+	
+	@RequestMapping(value="/users/edit/{username}", method=RequestMethod.GET)
+	public String getEditUser(@PathVariable("username") String username, Model m) {
+		
+		m.addAttribute("user", userService.getById(username));
+		
+		return "/admin/single-user";
+	}
+	
+	@RequestMapping(value="/users/edit/{username}", method=RequestMethod.POST)
+	public String handleEditUser(@PathVariable("username") String username, @Valid User user, BindingResult result, Model m) {
+		if(result.hasErrors()) {
+			return "/admin/single-user";
 		}
-		return "admin";
+		
+		String suppliedUsername = user.getUsername();
+		boolean usernameChanged = !suppliedUsername.equals(username);
+		
+		// todo: move this validation into a validator
+		if(usernameChanged && userService.getById(user.getUsername()) != null) {
+			result.rejectValue("username", "DuplicateKey.user.username");
+			return "/admin/single-user";
+		}
+		
+		userService.update(user);
+		m.addAttribute("success", true);
+		return "/admin/single-user";
 	}
 }

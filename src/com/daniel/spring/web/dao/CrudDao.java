@@ -23,5 +23,5 @@ public interface CrudDao<T, K> {
 	boolean update(T model);
 	
 	// Delete
-	boolean delete();	
+	boolean delete(T model);	
 }

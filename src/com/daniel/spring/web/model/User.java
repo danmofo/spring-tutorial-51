@@ -9,7 +9,7 @@ public class User {
 	@Size(min=1)
 	private String username;
 	
-	@Size(min=3, max=20, message="Password must be between {min} and {max} characters long.")
+	@Size(min=3, max=20)
 	private String password;
 	
 	@Email
