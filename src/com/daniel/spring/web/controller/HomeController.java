@@ -1,7 +1,5 @@
 package com.daniel.spring.web.controller;
 
-import java.security.Principal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +29,11 @@ public class HomeController {
 	public String test(Model m) {
 		m.addAttribute("offer", offerService.getUnsafe(111111));
 		return "test";
+	}
+	
+	@RequestMapping(value="/access-denied", method=RequestMethod.GET)
+	public String denied() {
+		return "denied";
 	}
 	
 }

@@ -1,12 +1,13 @@
 package com.daniel.spring.web.controller;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class DatabaseExceptionHandler {
+public class GlobalExceptionHandler {
 	
 	private static final String ERROR_VIEW = "test";
 	
@@ -18,6 +19,12 @@ public class DatabaseExceptionHandler {
 	
 	@ExceptionHandler(DataAccessException.class)
 	public String handleDatabaseException(DataAccessException ex, Model m) {
+		m.addAttribute("error", ex.getMessage());
+		return ERROR_VIEW;
+	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	public String handleAccessDeniedException(AccessDeniedException ex, Model m) {
 		m.addAttribute("error", ex.getMessage());
 		return ERROR_VIEW;
 	}

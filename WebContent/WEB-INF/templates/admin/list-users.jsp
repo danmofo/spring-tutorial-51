@@ -24,10 +24,8 @@
 					<td><c:out value="${user.email}"></c:out></td>
 					<td><c:out value="${user.authority}"></c:out></td>
 					<td><c:out value="${user.enabled}"></c:out></td>
-					<c:url value="/admin/users/view/${user.username}" var="userViewUrl" />
 					<c:url value="/admin/users/edit/${user.username}" var="userEditUrl" />
-					<td><a href='<c:out value="${userViewUrl}"></c:out>'
-						class="btn btn-primary">View</a> <a
+					<td><a
 						href='<c:out value="${userEditUrl}"></c:out>'
 						class="btn btn-default">Edit</a></td>
 				</tr>
