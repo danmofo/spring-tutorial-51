@@ -27,14 +27,16 @@
 			</div>
 
 			<div class="form-group">
-				<label>Password: </label> <input name="password"
-					placeholder="Enter your password" class="form-control"
+				<label>Password: </label> 
+				<input name="password"
+					placeholder="Enter your password"
+					class="form-control"
 					type="password" />
 			</div>
 
 			<div class="form-group">
 				<div class="checkbox">
-					<label> <input type="checkbox" name="remember-me"> Remember me for next time?
+					<label> <input type="checkbox" name="remember-me">Remember me for next time?
 					</label>
 				</div>
 			</div>

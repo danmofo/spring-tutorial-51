@@ -26,8 +26,7 @@
 
 			<div class="form-group">
 				<label>Password: </label>
-				<spring:input path="password" placeholder="" cssClass="form-control"
-					type="text" />
+				<spring:password path="password" placeholder="" cssClass="form-control" />
 				<spring:errors path="password" cssClass="alert alert-danger"></spring:errors>
 			</div>
 

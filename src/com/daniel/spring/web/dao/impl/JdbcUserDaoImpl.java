@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,23 +24,33 @@ import com.daniel.spring.web.model.User;
 public class JdbcUserDaoImpl implements CrudDao<User, String>{
 	
 	private NamedParameterJdbcTemplate jdbc;
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.jdbc = new NamedParameterJdbcTemplate(dataSource);
 	}
 	
+	@Autowired
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
+	
 	@Transactional
 	@Override
 	public void add(User user) {
-		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(user);
-		MapSqlParameterSource params2 = new MapSqlParameterSource();
-		params2.addValue("authority", user.getAuthority().toString());
-		params2.addValue("username", user.getUsername());
+		MapSqlParameterSource userParams = new MapSqlParameterSource();
+		userParams.addValue("username", user.getUsername());
+		userParams.addValue("password", passwordEncoder.encode(user.getPassword()));
+		userParams.addValue("email", user.getEmail());
+	
+		MapSqlParameterSource authorityParams = new MapSqlParameterSource();
+		authorityParams.addValue("authority", user.getAuthority().toString());
+		authorityParams.addValue("username", user.getUsername());
 		
 		// These will throw runtime exceptions if something goes wrong regardless
-		jdbc.update("insert into users (usersname, password, email) values (:username, :password, :email)", params);
-		jdbc.update("insert into authorities (username, authority) values (:username, :authority)", params2);
+		jdbc.update("insert into users (username, password, email) values (:username, :password, :email)", userParams);
+		jdbc.update("insert into authorities (username, authority) values (:username, :authority)", authorityParams);
 		
 	}
 
