@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.daniel.spring.web.dao.OfferDao;
 import com.daniel.spring.web.dao.impl.JdbcOfferDaoImpl;
 import com.daniel.spring.web.model.Offer;
 
 @Service("offerService")
+@Transactional
 public class OfferService {
 
 	private OfferDao dao;
