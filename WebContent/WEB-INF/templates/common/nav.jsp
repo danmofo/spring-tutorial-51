@@ -1,3 +1,4 @@
+<%@include file="/WEB-INF/templates/common/taglibs.jsp"%>
 <nav class="navbar navbar-default">
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -37,7 +38,7 @@
 </nav>
 
 <sec:authorize access="isAuthenticated()">
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar--admin">
   <div class="container">
 
     <!-- Collect the nav links, forms, and other content for toggling -->

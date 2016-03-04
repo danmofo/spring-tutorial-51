@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-	<definition name="home" template="/WEB-INF/templates/layouts/default.jsp">
-		
+	<definition name="base" template="/WEB-INF/templates/layouts/default.jsp">
+		<put-attribute name="title" value="This is the page title" />
+		<put-attribute name="header" value="/WEB-INF/templates/common/nav.jsp"></put-attribute>
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/home.jsp"></put-attribute>
+		<put-attribute name="footer"
+			value="/WEB-INF/templates/common/footer.jsp"></put-attribute>
 	</definition>
+
+	<definition name="home" extends="base"></definition>
+	<definition name="/admin/home" extends="base"></definition>
+	<definition name="/admin/list-users" extends="base"></definition>
+	<definition name="/admin/single-user" extends="base"></definition>
+	<definition name="login" extends="base"></definition>
+	<definition name="create-account" extends="base"></definition>
+	<definition name="test" extends="base"></definition>
+	<definition name="home" extends="base"></definition>
+	<definition name="denied" extends="base"></definition>
+	<definition name="list" extends="base"></definition>
+	<definition name="edit" extends="base"></definition>
+	<definition name="single" extends="base"></definition>
 </tiles-definitions>
