@@ -102,5 +102,10 @@
   		<artifactId>spring-security-taglibs</artifactId>
   		<version>4.0.3.RELEASE</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.apache.tiles</groupId>
+  		<artifactId>tiles-extras</artifactId>
+  		<version>3.0.5</version>
+  	</dependency>
   </dependencies>
 </project>
