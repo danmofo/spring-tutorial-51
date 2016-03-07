@@ -9,16 +9,39 @@
 			value="/WEB-INF/templates/common/footer.jsp"></put-attribute>
 	</definition>
 
-	<definition name="home" extends="base"></definition>
-	<definition name="/admin/home" extends="base"></definition>
-	<definition name="/admin/list-users" extends="base"></definition>
-	<definition name="/admin/single-user" extends="base"></definition>
-	<definition name="login" extends="base"></definition>
-	<definition name="create-account" extends="base"></definition>
-	<definition name="test" extends="base"></definition>
-	<definition name="home" extends="base"></definition>
-	<definition name="denied" extends="base"></definition>
-	<definition name="list" extends="base"></definition>
-	<definition name="edit" extends="base"></definition>
-	<definition name="single" extends="base"></definition>
+	<definition name="home" extends="base">
+	</definition>
+	<definition name="/admin/home" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/admin/home.jsp"></put-attribute>
+	</definition>
+	<definition name="/admin/list-users" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/admin/list-users.jsp"></put-attribute>
+	</definition>
+	<definition name="/admin/single-user" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/admin/single-user.jsp"></put-attribute>
+	</definition>
+	<definition name="login" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/login.jsp"></put-attribute>
+	</definition>
+	<definition name="create-account" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/create-account.jsp"></put-attribute>
+	</definition>
+	<definition name="test" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/test.jsp"></put-attribute>
+	</definition>
+	<definition name="denied" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/denied.jsp"></put-attribute>
+	</definition>
+	<definition name="list" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/list.jsp"></put-attribute>
+	</definition>
+	<definition name="edit" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/edit.jsp"></put-attribute>
+	</definition>
+	<definition name="single" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/single.jsp"></put-attribute>
+	</definition>
+	<definition name="create" extends="base">
+		<put-attribute name="content" value="/WEB-INF/templates/tiles/create.jsp"></put-attribute>
+	</definition>
 </tiles-definitions>

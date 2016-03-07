@@ -1,6 +1,9 @@
 <%@include file="/WEB-INF/templates/common/taglibs.jsp" %>
-<h1>Home</h1>
-<p>This is the homepage. Here are the latest 5 offers:</p>
+<h1>List page</h1>
+<p>
+	This is the list page. Here are all the offers: <a
+		href='<c:url value="/"></c:url>'>Go home</a>
+</p>
 <table class="table">
 	<tr>
 		<th>ID</th>
@@ -23,8 +26,5 @@
 				class="btn btn-default">Edit</a></td>
 		</tr>
 	</c:forEach>
-	<tr>
-		<td colspan="5"><a href='<c:url value="/offers/list"></c:url>'
-			class="btn btn-primary">View all..</a></td>
-	</tr>
+
 </table>

@@ -5,6 +5,7 @@ span.alert-danger {
 	margin-top: 10px;
 }
 
-.nav--admin {
-	margin-bottom: -20px;	
+.navbar--admin {
+	margin-top: -20px;
+	background-color: #cdcdcd;
 }

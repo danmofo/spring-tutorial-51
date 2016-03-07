@@ -1,5 +1,7 @@
 package com.daniel.spring.web.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,8 @@ import com.daniel.spring.web.service.OfferService;
 @RequestMapping(value="/")
 public class HomeController {
 	
+	private static Logger logger = LogManager.getLogger(HomeController.class);
+	
 	private OfferService offerService;
 	
 	@Autowired
@@ -22,6 +26,7 @@ public class HomeController {
 	@RequestMapping(method=RequestMethod.GET)
 	public String getHome(Model m) {
 		m.addAttribute("offers", offerService.getCurrent());
+		logger.warn("YO!");
 		return "home";
 	}
 	
