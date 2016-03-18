@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.9, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.19, for osx10.7 (i386)
 --
 -- Host: localhost    Database: spring
 -- ------------------------------------------------------
--- Server version	5.7.11-log
+-- Server version	5.7.10
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,14 +16,44 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `authorities`
+--
+
+DROP TABLE IF EXISTS `authorities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `authorities` (
+  `username` varchar(60) NOT NULL,
+  `authority` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `authorities`
 --
 
 LOCK TABLES `authorities` WRITE;
 /*!40000 ALTER TABLE `authorities` DISABLE KEYS */;
-INSERT INTO `authorities` VALUES ('dan','ROLE_ADMIN'),('dannym','ROLE_USER'),('dd','ROLE_ADMIN'),('everyclick','ROLE_USER');
+INSERT INTO `authorities` VALUES ('dan','ROLE_ADMIN'),('dan2','ROLE_ADMIN');
 /*!40000 ALTER TABLE `authorities` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `offer`
+--
+
+DROP TABLE IF EXISTS `offer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `offer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(80) NOT NULL,
+  `text` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `offer`
@@ -31,8 +61,25 @@ UNLOCK TABLES;
 
 LOCK TABLES `offer` WRITE;
 /*!40000 ALTER TABLE `offer` DISABLE KEYS */;
+INSERT INTO `offer` VALUES (1,'My sick offer','daniel@lol.com','Hello world!');
 /*!40000 ALTER TABLE `offer` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `username` varchar(60) NOT NULL,
+  `password` varchar(80) DEFAULT NULL,
+  `enabled` tinyint(1) DEFAULT '1',
+  `email` varchar(80) DEFAULT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `users`
@@ -40,7 +87,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('dan','password',1,'danmofo@gmail.com'),('dannym','password',1,'daniel@everyclick.com'),('dd','dddd',1,'dd@dd.com'),('everyclick','password',1,'test@example.com');
+INSERT INTO `users` VALUES ('dan','dd00f93ed58386fb85ff6a63e8cecc4adb92994df962922862f7b2ee46a0eb6b47e57319c5d00767',1,'dan@lol.com'),('dan2','b469f9c900b05666caa368e98cbc6b89cbb5067238b9954d1d022a8d72228273aac975f7f1ffbcaf',1,'dan@lol2.com'),('test','3895b16e91c9b5804be30e2752d4dde38faa411469c85dbba697016f14f2ccad4073e4e100a735a0',1,'dan@testz.com');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +100,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-18  7:48:12
+-- Dump completed on 2016-03-18 11:36:04

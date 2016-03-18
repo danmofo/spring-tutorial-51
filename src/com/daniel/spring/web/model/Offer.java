@@ -1,53 +1,41 @@
 package com.daniel.spring.web.model;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
-
-public class Offer implements Serializable {
-
-	private static final long serialVersionUID = 8793424968085115667L;
-
+public class Offer {
+	
 	private int id;
-	
-	@Size(min=3, max=13, message="Name must be between {min} and {max} characters.")
-	private String name;
-	
-	@Email(message="Must be a really valid email address mate.")
-	private String email;
 	
 	@Size(min=10, message="Must be at least {min} characters.")
 	private String text;
 	
+	private User user;
+	
 	public Offer() {}
 	
-	public Offer(String name, String email, String text) {
-		this.name = name;
-		this.email = email;
+	public Offer(User user, String text) {
+		this.user = user;
 		this.text = text;
 	}
-
-	public Offer(int id, String name, String email, String text) {
+	
+	public Offer(int id, User user, String text) {
 		this.id = id;
-		this.name = name;
-		this.email = email;
+		this.user = user;
 		this.text = text;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
+	
 	public void setText(String text) {
 		this.text = text;
 	}
@@ -55,16 +43,39 @@ public class Offer implements Serializable {
 		return id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
 	public String getText() {
 		return text;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Offer other = (Offer) obj;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
 	}
 
 	@Override
@@ -72,14 +83,15 @@ public class Offer implements Serializable {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Offer [id=");
 		builder.append(id);
-		builder.append(", name=");
-		builder.append(name);
-		builder.append(", email=");
-		builder.append(email);
 		builder.append(", text=");
 		builder.append(text);
+		builder.append(", user=");
+		builder.append(user);
 		builder.append("]");
 		return builder.toString();
 	}
+	
+	
+
 
 }
