@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
+import com.daniel.spring.web.dao.CrudDao;
 import com.daniel.spring.web.dao.impl.JdbcUserDaoImpl;
 import com.daniel.spring.web.model.Role;
 import com.daniel.spring.web.model.User;
@@ -13,7 +14,7 @@ import com.daniel.spring.web.model.User;
 @Service("userService")
 public class UserService {
 
-	private JdbcUserDaoImpl dao;
+	private CrudDao<User, String> dao;
 	
 	@Autowired(required=true)
 	public void setUserDao(JdbcUserDaoImpl dao) {

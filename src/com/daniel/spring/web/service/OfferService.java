@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.daniel.spring.web.dao.OfferDao;
+import com.daniel.spring.web.dao.CrudDao;
 import com.daniel.spring.web.dao.impl.JdbcOfferDaoImpl;
 import com.daniel.spring.web.model.Offer;
 
@@ -14,7 +14,7 @@ import com.daniel.spring.web.model.Offer;
 @Transactional
 public class OfferService {
 
-	private OfferDao dao;
+	private CrudDao<Offer, Integer> dao;
 	
 	@Autowired(required=true)
 	public void setOfferDao(JdbcOfferDaoImpl dao) {
@@ -27,10 +27,6 @@ public class OfferService {
 	
 	public boolean update(Offer offer) {
 		return dao.update(offer);
-	}
-	
-	public Offer getByName(String name) {
-		return dao.retrieve(name);
 	}
 	
 	public Offer getById(int id) {
@@ -47,10 +43,5 @@ public class OfferService {
 	
 	public List<Offer> getCurrent() {
 		return dao.list(5);
-	}
-	
-	// Dummy method that will always return 0 results + throw an exception!
-	public Offer getUnsafe(int id) {
-		return dao.retrieveUnsafe(id);
 	}
 }

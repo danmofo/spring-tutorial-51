@@ -17,9 +17,8 @@ public class User {
 		
 	@Size(min=1, max=13, message="Name must be between {min} and {max} characters.")
 	private String name;
-		
-	private Role authority = Role.ROLE_USER;
 	
+	private Role authority = Role.ROLE_USER;
 	private boolean enabled = true;
 
 	public String getName() {

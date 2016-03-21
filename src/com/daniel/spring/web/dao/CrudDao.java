@@ -12,7 +12,7 @@ import java.util.List;
 public interface CrudDao<T, K> {
 	
 	// Create
-	void add(T model);
+	boolean add(T model);
 	
 	// Read
 	T retrieve(K key);

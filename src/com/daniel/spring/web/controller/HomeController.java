@@ -30,12 +30,6 @@ public class HomeController {
 		return "home";
 	}
 	
-	@RequestMapping(value="/test", method=RequestMethod.GET)
-	public String test(Model m) {
-		m.addAttribute("offer", offerService.getUnsafe(111111));
-		return "test";
-	}
-	
 	@RequestMapping(value="/access-denied", method=RequestMethod.GET)
 	public String denied() {
 		return "denied";

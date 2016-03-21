@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -38,20 +40,15 @@ public class JdbcUserDaoImpl implements CrudDao<User, String>{
 	
 	@Transactional
 	@Override
-	public void add(User user) {
+	public boolean add(User user) {
 		MapSqlParameterSource userParams = new MapSqlParameterSource();
 		userParams.addValue("username", user.getUsername());
 		userParams.addValue("password", passwordEncoder.encode(user.getPassword()));
 		userParams.addValue("email", user.getEmail());
-	
-		MapSqlParameterSource authorityParams = new MapSqlParameterSource();
-		authorityParams.addValue("authority", user.getAuthority().toString());
-		authorityParams.addValue("username", user.getUsername());
+		userParams.addValue("name", user.getName());
+		userParams.addValue("authority", user.getAuthority().toString());		
 		
-		// These will throw runtime exceptions if something goes wrong regardless
-		jdbc.update("insert into users (username, password, email) values (:username, :password, :email)", userParams);
-		jdbc.update("insert into authorities (username, authority) values (:username, :authority)", authorityParams);
-		
+		return jdbc.update("insert into users (username, password, email, name, authority) values (:username, :password, :email, :name, :authority)", userParams) == 1;
 	}
 
 	@Override
@@ -61,7 +58,6 @@ public class JdbcUserDaoImpl implements CrudDao<User, String>{
 		List<User> user = this.jdbc.query("select * from users where username = :username", params, new UserRowMapperImpl());
 		
 		return user.size() != 0 ? user.get(0) : null;
-		
 	}
 
 	// Using shortened BeanPropertyRowMapper.newInstance

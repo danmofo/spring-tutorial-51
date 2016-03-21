@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.daniel.spring.web.model.Offer;
+import com.daniel.spring.web.model.Role;
+import com.daniel.spring.web.model.User;
 
 /**
  * RowMapper implementation for extracting results from the Offers database
@@ -16,11 +18,20 @@ public class OfferRowMapperImpl implements RowMapper<Offer>{
 
 	@Override
 	public Offer mapRow(ResultSet rs, int rowNum) throws SQLException {
+		
+		// Map user
+		User user = new User();
+		user.setAuthority(Role.valueOf(rs.getString("authority")));
+		user.setEmail(rs.getString("email"));
+		user.setEnabled(rs.getBoolean("enabled"));
+		user.setUsername(rs.getString("username"));
+		user.setName(rs.getString("name"));
+		
+		// Map offer
 		Offer offer = new Offer();
 		offer.setId(rs.getInt("id"));
-		offer.setName(rs.getString("name"));
 		offer.setText(rs.getString("text"));
-		offer.setEmail(rs.getString("email"));
+		
 		return offer;
 	}
 

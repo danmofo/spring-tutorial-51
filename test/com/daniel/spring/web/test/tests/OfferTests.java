@@ -12,15 +12,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.daniel.spring.web.dao.CrudDao;
+import com.daniel.spring.web.model.Offer;
 import com.daniel.spring.web.model.Role;
 import com.daniel.spring.web.model.User;
 
@@ -30,8 +30,9 @@ import com.daniel.spring.web.model.User;
 		"classpath:com/daniel/spring/web/test/config/datasource.xml",
 		"classpath:com/daniel/spring/web/config/security-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
-public class UserTests {
+public class OfferTests {
 	
+	private static Offer offer;
 	private static User user;
 	
 	static {
@@ -43,29 +44,37 @@ public class UserTests {
 		u.setEnabled(true);
 		u.setAuthority(Role.ROLE_ADMIN);
 		
+		Offer o = new Offer();
+		o.setText("This is a sick offer, dude.");
+		o.setUser(u);
+		
+		offer = o;
 		user = u;
 		
 		System.out.println(user);
+		System.out.println(offer);
 	}
 	
 	@Autowired
-	private CrudDao<User, String> userDao;
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private CrudDao<Offer, Integer> offerDao;
 	
 	@Autowired
 	private DataSource dataSource;
 	
 	@Before
 	public void init() {
-		System.out.println("Setting up");
+		System.out.println("Setting up..");
 		
-		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
+		NamedParameterJdbcTemplate jdbc = new NamedParameterJdbcTemplate(dataSource);
 		
-		jdbc.execute("delete from users");
-		jdbc.execute("delete from authorities");
+		// Remove all existing users and offers before each test, remove offers first because of the FK.
+		jdbc.update("delete from offer", new MapSqlParameterSource());
+		jdbc.update("delete from users", new MapSqlParameterSource());
 		
+		// Create a dummy user since all offers require a user.
 		MapSqlParameterSource userParams = new MapSqlParameterSource();
 		userParams.addValue("username", user.getUsername());
 		userParams.addValue("password", passwordEncoder.encode(user.getPassword()));
@@ -77,40 +86,39 @@ public class UserTests {
 	}
 	
 	@Test
-	public void testAddUser() {
-		userDao.add(UserTests.user);
-		
-		assertEquals("User should be added to the database.", 1, userDao.list().size());
+	public void testAdd() {
+		assertTrue("Offer creation should return true on success.", offerDao.add(offer));
 	}
 	
 	@Test
-	public void testListUsers() {
-		userDao.add(UserTests.user);
-		List<User> users = userDao.list();
-				
-		assertEquals("Should list the correct amount of users.", 1, users.size());
+	public void testDelete() {
+		offerDao.add(offer);
+		assertTrue("Offer deletion should return true on success.", offerDao.delete(offer));
 	}
 	
 	@Test
-	public void testUpdateUser() {
-		User u = new User();
-		u.setUsername("daniel");
-		u.setPassword("password");
-		u.setEmail("dan@lol.com");
-		u.setEnabled(true);
-		u.setAuthority(Role.ROLE_ADMIN);
+	public void testUpdate() {
+		offerDao.add(offer);
+		offer.setText("This offer has changed...");
+		assertTrue("Offer updates should return true on success.", offerDao.update(offer));
+	}
+	
+	@Test
+	public void testList() {
+		offerDao.add(offer);
+		List<Offer> offers = offerDao.list();
 		
-		// Add a user
-		userDao.add(u);
+		System.out.println(offers);
 		
-		// Modify some properties
-		u.setEnabled(false);
-		
-		// Check it worked
-		assertTrue("Update should return true when successful.", userDao.update(u));
-		
-		// verify
-		assertEquals("User should have been updated", false, userDao.retrieve("daniel").isEnabled());
+		assertEquals("Should list all offers in the database", 1, offers.size());
+	}
+	
+	@Test
+	public void testListWithLimit() {
+		offerDao.add(offer);
+		int size = 0;
+		List<Offer> offers = offerDao.list(size);
+		assertEquals("Offer count should match the specified limit (if enough rows exist in the table)", size, offers.size());
 	}
 	
 	@After
