@@ -90,30 +90,30 @@ public class OfferTests {
 	
 	@Test
 	public void testDelete() {
-		Offer retreivedOffer = null;
+		Offer retrievedOffer = null;
 		offerDao.add(offer);
 		
 		for(Offer o : offerDao.list()) {
-			retreivedOffer = o;
+			retrievedOffer = o;
 		}
 		
-		assertTrue("Offer deletion should return true on success.", offerDao.delete(retreivedOffer));
+		assertTrue("Offer deletion should return true on success.", offerDao.delete(retrievedOffer));
 	}
 	
 	@Test
 	public void testUpdate() {
-		Offer retreivedOffer = null;
+		Offer retrievedOffer = null;
 		offerDao.add(offer);
 		
 		// I'm almost certain there is a better way to get the offer ID after inserting, whilst still preserving the boolean return
 		// value. This will only work for a single offer in the table.
 		for(Offer o : offerDao.list()) {
-			retreivedOffer = o;
+			retrievedOffer = o;
 		}
 				
-		retreivedOffer.setText("This offer has been updated.");
+		retrievedOffer.setText("This offer has been updated.");
 
-		assertTrue("Offer updates should return true on success.", offerDao.update(retreivedOffer));
+		assertTrue("Offer updates should return true on success.", offerDao.update(retrievedOffer));
 	}
 	
 	@Test

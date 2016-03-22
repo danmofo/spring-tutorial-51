@@ -25,10 +25,17 @@ import com.daniel.spring.web.model.User;
 @Component("userDao")
 public class JdbcUserDaoImpl implements CrudDao<User, String>{
 	
+	public static final String QUERY_INSERT 				= "insert into users (username, authority, name, password, email) values (:username, :authority, :name, :password, :email)";
+	public static final String QUERY_RETRIEVE_ALL 			= "select * from users ";
+	public static final String QUERY_RETRIEVE_ALL_LIMIT 	= QUERY_RETRIEVE_ALL + "limit :limit";
+	public static final String QUERY_RETRIEVE_SINGLE 		= QUERY_RETRIEVE_ALL + "where username = :username";
+	public static final String QUERY_UPDATE 				= "update users set authority=:authority, name=:name, password=:password, enabled=:enabled, email=:email where username = :username";
+	public static final String QUERY_DELETE 				= "delete from users where username = :username";
+	
 	private NamedParameterJdbcTemplate jdbc;
 	private PasswordEncoder passwordEncoder;
 	
-	@Autowired
+	@Autowired(required=true)
 	public void setDataSource(DataSource dataSource) {
 		this.jdbc = new NamedParameterJdbcTemplate(dataSource);
 	}
@@ -48,55 +55,44 @@ public class JdbcUserDaoImpl implements CrudDao<User, String>{
 		userParams.addValue("name", user.getName());
 		userParams.addValue("authority", user.getAuthority().toString());		
 		
-		return jdbc.update("insert into users (username, password, email, name, authority) values (:username, :password, :email, :name, :authority)", userParams) == 1;
+		return jdbc.update(QUERY_INSERT, userParams) == 1;
 	}
 
 	@Override
 	public User retrieve(String username) {
 		MapSqlParameterSource params = new MapSqlParameterSource("username", username);
-				
-		List<User> user = this.jdbc.query("select * from users where username = :username", params, new UserRowMapperImpl());
+		List<User> user = this.jdbc.query(QUERY_RETRIEVE_SINGLE, params, new UserRowMapperImpl());
 		
 		return user.size() != 0 ? user.get(0) : null;
 	}
 
-	// Using shortened BeanPropertyRowMapper.newInstance
 	@Override
 	public List<User> list(int limit) {
-		System.out.println("Using list(int limit)");
-		return this.jdbc.query("select u.username, u.enabled, u.email, a.authority from users u inner join authorities a on a.username = u.username", BeanPropertyRowMapper.newInstance(User.class));
+		MapSqlParameterSource params = new MapSqlParameterSource("limit", limit);
+		return this.jdbc.query(QUERY_RETRIEVE_ALL_LIMIT, params, new UserRowMapperImpl());
 	}
 
-	// Equivalent of the above, manually mapping rows
 	@Override
 	public List<User> list() {
-		List<User> users = this.jdbc.query("select u.username, u.enabled, u.email, a.authority from users u inner join authorities a on a.username = u.username order by u.enabled desc", new RowMapper<User>() {
-
-			@Override
-			public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-				User user = new User();
-				user.setUsername(rs.getString("username"));
-				user.setAuthority(Role.valueOf(rs.getString("authority")));
-				user.setEmail(rs.getString("email"));
-				user.setEnabled(rs.getBoolean("enabled"));
-				
-				return user;
-			}
-		});
-		
-		return users;
-		
+		return this.jdbc.query(QUERY_RETRIEVE_ALL, new UserRowMapperImpl());		
 	}
 
 	@Override
 	public boolean update(User user) {
-		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(user);
-		
-		return this.jdbc.update("update users set username=:username, password=:password, enabled=:enabled where username=:username", params) == 1;
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		params.addValue("username", user.getUsername());
+		params.addValue("password", passwordEncoder.encode(user.getPassword()));
+		params.addValue("email", user.getEmail());
+		params.addValue("enabled", user.isEnabled());
+		params.addValue("name", user.getName());
+		params.addValue("authority", user.getAuthority().toString());
+				
+		return this.jdbc.update(QUERY_UPDATE, params) == 1;
 	}
 
 	@Override
 	public boolean delete(User user) {
+		user.setEnabled(false);
 		return update(user);
 	}
 

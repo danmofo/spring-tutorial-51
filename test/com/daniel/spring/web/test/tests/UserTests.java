@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -31,9 +30,7 @@ import com.daniel.spring.web.model.User;
 		"classpath:com/daniel/spring/web/config/security-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserTests {
-	
-	private static User user;
-	
+		
 	static {
 		User u = new User();
 		u.setName("Daniel Moffat");
@@ -42,79 +39,79 @@ public class UserTests {
 		u.setEmail("dan@lol.com");
 		u.setEnabled(true);
 		u.setAuthority(Role.ROLE_ADMIN);
-		
+				
 		user = u;
-		
-		System.out.println(user);
 	}
 	
-	@Autowired
-	private CrudDao<User, String> userDao;
+	private static User user;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+		
+	@Autowired
+	private CrudDao<User, String> userDao;
 	
 	@Autowired
 	private DataSource dataSource;
 	
 	@Before
-	public void init() {
-		System.out.println("Setting up");
-		
+	public void init() {	
 		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
 		
-		jdbc.execute("delete from users");
-		jdbc.execute("delete from authorities");
-		
-		MapSqlParameterSource userParams = new MapSqlParameterSource();
-		userParams.addValue("username", user.getUsername());
-		userParams.addValue("password", passwordEncoder.encode(user.getPassword()));
-		userParams.addValue("email", user.getEmail());
-		userParams.addValue("name", user.getName());
-		userParams.addValue("authority", user.getAuthority().toString());		
-		
-		jdbc.update("insert into users (username, password, email, name, authority) values (:username, :password, :email, :name, :authority)", userParams);
+		jdbc.update("delete from offer");
+		jdbc.update("delete from users");
 	}
 	
 	@Test
-	public void testAddUser() {
-		userDao.add(UserTests.user);
-		
-		assertEquals("User should be added to the database.", 1, userDao.list().size());
+	public void testAdd() {
+		assertTrue("Offer creation should return true on success.", userDao.add(user));
 	}
 	
 	@Test
-	public void testListUsers() {
-		userDao.add(UserTests.user);
+	public void testDelete() {
+		User retrievedUser = null;
+		userDao.add(user);
+		
+		for(User u : userDao.list()) {
+			retrievedUser = u;
+		}
+		
+		assertTrue("User deletion should return true on success.", userDao.delete(retrievedUser));
+	}
+	
+	@Test
+	public void testUpdate() {
+		User retrievedUser = null;
+		userDao.add(user);
+		
+		for(User u : userDao.list()) {
+			retrievedUser = u;
+		}
+				
+		retrievedUser.setName("Bobby Tables");
+
+		assertTrue("Offer updates should return true on success.", userDao.update(retrievedUser));
+	}
+	
+	@Test
+	public void testList() {
+		userDao.add(user);
 		List<User> users = userDao.list();
 				
-		assertEquals("Should list the correct amount of users.", 1, users.size());
+		assertEquals("Should list all users in the database", 1, users.size());
 	}
 	
 	@Test
-	public void testUpdateUser() {
-		User u = new User();
-		u.setUsername("daniel");
-		u.setPassword("password");
-		u.setEmail("dan@lol.com");
-		u.setEnabled(true);
-		u.setAuthority(Role.ROLE_ADMIN);
-		
-		// Add a user
-		userDao.add(u);
-		
-		// Modify some properties
-		u.setEnabled(false);
-		
-		// Check it worked
-		assertTrue("Update should return true when successful.", userDao.update(u));
-		
-		// verify
-		assertEquals("User should have been updated", false, userDao.retrieve("daniel").isEnabled());
+	public void testListWithLimit() {
+		userDao.add(user);
+		int size = 0;
+		List<User> users = userDao.list(size);
+		assertEquals("User count should match the specified limit (if enough rows exist in the table)", size, users.size());
 	}
 	
 	@After
 	public void destroy() {
-		System.out.println("Cleaning up..");
+		System.out.println("All done!");
+		System.out.println(userDao.list());
 	}
 }
