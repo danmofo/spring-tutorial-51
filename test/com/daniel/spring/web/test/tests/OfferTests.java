@@ -31,10 +31,7 @@ import com.daniel.spring.web.model.User;
 		"classpath:com/daniel/spring/web/config/security-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class OfferTests {
-	
-	private static Offer offer;
-	private static User user;
-	
+		
 	static {
 		User u = new User();
 		u.setName("Daniel Moffat");
@@ -50,10 +47,10 @@ public class OfferTests {
 		
 		offer = o;
 		user = u;
-		
-		System.out.println(user);
-		System.out.println(offer);
 	}
+	
+	private static Offer offer;
+	private static User user;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -62,12 +59,13 @@ public class OfferTests {
 	private CrudDao<Offer, Integer> offerDao;
 	
 	@Autowired
+	private CrudDao<User, String> userDao;
+	
+	@Autowired
 	private DataSource dataSource;
 	
 	@Before
-	public void init() {
-		System.out.println("Setting up..");
-		
+	public void init() {	
 		NamedParameterJdbcTemplate jdbc = new NamedParameterJdbcTemplate(dataSource);
 		
 		// Remove all existing users and offers before each test, remove offers first because of the FK.
@@ -92,24 +90,37 @@ public class OfferTests {
 	
 	@Test
 	public void testDelete() {
+		Offer retreivedOffer = null;
 		offerDao.add(offer);
-		assertTrue("Offer deletion should return true on success.", offerDao.delete(offer));
+		
+		for(Offer o : offerDao.list()) {
+			retreivedOffer = o;
+		}
+		
+		assertTrue("Offer deletion should return true on success.", offerDao.delete(retreivedOffer));
 	}
 	
 	@Test
 	public void testUpdate() {
+		Offer retreivedOffer = null;
 		offerDao.add(offer);
-		offer.setText("This offer has changed...");
-		assertTrue("Offer updates should return true on success.", offerDao.update(offer));
+		
+		// I'm almost certain there is a better way to get the offer ID after inserting, whilst still preserving the boolean return
+		// value. This will only work for a single offer in the table.
+		for(Offer o : offerDao.list()) {
+			retreivedOffer = o;
+		}
+				
+		retreivedOffer.setText("This offer has been updated.");
+
+		assertTrue("Offer updates should return true on success.", offerDao.update(retreivedOffer));
 	}
 	
 	@Test
 	public void testList() {
 		offerDao.add(offer);
 		List<Offer> offers = offerDao.list();
-		
-		System.out.println(offers);
-		
+				
 		assertEquals("Should list all offers in the database", 1, offers.size());
 	}
 	
@@ -123,6 +134,7 @@ public class OfferTests {
 	
 	@After
 	public void destroy() {
-		System.out.println("Cleaning up..");
+		System.out.println("All done!");
+		System.out.println(offerDao.list());
 	}
 }
