@@ -1,28 +1,20 @@
 package com.daniel.spring.web.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
-import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.daniel.spring.web.dao.CrudDao;
-import com.daniel.spring.web.model.Role;
 import com.daniel.spring.web.model.User;
 
-@Component("userDao")
+@Repository("userDao")
 public class JdbcUserDaoImpl implements CrudDao<User, String>{
 	
 	public static final String QUERY_INSERT 				= "insert into users (username, authority, name, password, email) values (:username, :authority, :name, :password, :email)";

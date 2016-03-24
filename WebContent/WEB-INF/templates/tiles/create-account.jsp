@@ -7,6 +7,13 @@
 			type="text" />
 		<spring:errors path="username" cssClass="alert alert-danger"></spring:errors>
 	</div>
+	
+	<div class="form-group">
+		<label>Full name: </label>
+		<spring:input path="name" placeholder="" cssClass="form-control"
+			type="text" />
+		<spring:errors path="name" cssClass="alert alert-danger"></spring:errors>
+	</div>
 
 	<div class="form-group">
 		<label>Email: </label>

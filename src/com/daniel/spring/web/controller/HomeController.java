@@ -26,6 +26,7 @@ public class HomeController {
 	@RequestMapping(method=RequestMethod.GET)
 	public String getHome(Model m) {
 		m.addAttribute("offers", offerService.getCurrent());
+		logger.debug(offerService.getCurrent());
 		logger.warn("YO!");
 		return "home";
 	}

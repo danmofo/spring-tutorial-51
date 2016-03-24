@@ -7,6 +7,7 @@ import java.util.List;
  * @author danielmoffat
  *
  * @param <T> The model
+ * @param <K> The primary key type
  */
 
 public interface CrudDao<T, K> {

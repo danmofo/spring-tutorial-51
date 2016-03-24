@@ -4,7 +4,7 @@
 <table class="table">
 	<tr>
 		<th>ID</th>
-		<th>Name</th>
+		<th>Username</th>
 		<th>Email</th>
 		<th>Description</th>
 		<th>Actions</th>
@@ -12,8 +12,8 @@
 	<c:forEach var="offer" items="${offers}">
 		<tr>
 			<td><c:out value="${offer.id}"></c:out></td>
-			<td><c:out value="${offer.name}"></c:out></td>
-			<td><c:out value="${offer.email}"></c:out></td>
+			<td><c:out value="${offer.user.username}"></c:out></td>
+			<td><c:out value="${offer.user.email}"></c:out></td>
 			<td><c:out value="${offer.text}"></c:out></td>
 			<c:url value="/offers/view/${offer.id}" var="offerViewUrl" />
 			<c:url value="/offers/edit/${offer.id}" var="offerEditUrl" />
