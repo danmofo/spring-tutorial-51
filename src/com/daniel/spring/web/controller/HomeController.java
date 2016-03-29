@@ -14,7 +14,7 @@ import com.daniel.spring.web.service.OfferService;
 @RequestMapping(value="/")
 public class HomeController {
 	
-	private static Logger logger = LogManager.getLogger(HomeController.class);
+	private static final Logger logger = LogManager.getLogger(HomeController.class);
 	
 	private OfferService offerService;
 	
@@ -26,8 +26,6 @@ public class HomeController {
 	@RequestMapping(method=RequestMethod.GET)
 	public String getHome(Model m) {
 		m.addAttribute("offers", offerService.getCurrent());
-		logger.debug(offerService.getCurrent());
-		logger.warn("YO!");
 		return "home";
 	}
 	
