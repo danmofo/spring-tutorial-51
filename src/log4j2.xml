@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="trace">
-  <appenders>
-    <console name="console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%-5level %logger{36} - %msg%n"/>
-    </console>
-  </appenders>
-
-  <loggers>
-    <root level="ALL">
-      <appender-ref ref="console" />
-    </root>    
-  </loggers>
-</configuration>
+<Configuration>
+	<Appenders>
+		<Console name="consoleShort" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{dd-MMM-yy HH:mm:ss,SSS} - (%l) %m%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.daniel.spring.web.service" level="info" />
+		<Logger name="org.springframework.web" level="info" />
+		<Root level="error">
+			<AppenderRef ref="consoleShort" />
+		</Root>
+	</Loggers>
+</Configuration>
