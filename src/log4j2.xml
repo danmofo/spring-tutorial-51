@@ -2,14 +2,32 @@
 <Configuration>
 	<Appenders>
 		<Console name="consoleShort" target="SYSTEM_OUT">
-			<PatternLayout pattern="%d{dd-MMM-yy HH:mm:ss,SSS} - (%l) %m%n" />
+			<PatternLayout pattern="[%d{dd-MMM-yy HH:mm:ss,SSS}] - %l %m%n" />
 		</Console>
+		
+		<Console name="consoleMessageOnly" target="SYSTEM_OUT">
+			<PatternLayout pattern="[%d{dd-MMM-yy HH:mm:ss,SSS}] - %m%n" />
+		</Console>
+		
+		<File name="fileShort" fileName="/var/log/offer/out.log">
+			<PatternLayout pattern="[%d{dd-MMM-yy HH:mm:ss,SSS}] - %l %m%n" />
+		</File>
 	</Appenders>
 	<Loggers>
-		<Logger name="com.daniel.spring.web.service" level="info" />
-		<Logger name="org.springframework.web" level="info" />
-		<Root level="error">
+		<Logger name="com.daniel.spring.web" level="error" additivity="false">
+			<AppenderRef ref="fileShort" />
 			<AppenderRef ref="consoleShort" />
-		</Root>
+		</Logger>
+		
+		<Logger name="com.daniel.spring.web.service" level="info" additivity="false">
+			<AppenderRef ref="fileShort" />
+			<AppenderRef ref="consoleShort" />
+		</Logger>
+		
+		<Logger name="org.springframework.web" level="info">
+			<AppenderRef ref="consoleMessageOnly" />
+		</Logger>
+		
+		<Root></Root>
 	</Loggers>
 </Configuration>
