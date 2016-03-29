@@ -4,6 +4,9 @@
 <spring:form commandName="offer" method="POST" action="/offers/create">
 
 	<div class="form-group">
+
+		<spring:input path="user.username" type="text" />
+		
 		<label>Text: </label>
 		<spring:input path="text" placeholder="" cssClass="form-control"
 			type="text" />

@@ -23,7 +23,6 @@ public class UserService {
 	
 	@Secured("ROLE_ADMIN")
 	public List<User> getAll() {
-		System.out.println("Not so secure..");
 		return dao.list(10);
 	}
 	

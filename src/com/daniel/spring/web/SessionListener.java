@@ -3,9 +3,7 @@ package com.daniel.spring.web;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-
-//asd
-public class SessionListener implements HttpSessionListener{
+public class SessionListener implements HttpSessionListener {
 
 	@Override
 	public void sessionCreated(HttpSessionEvent se) {
@@ -16,7 +14,6 @@ public class SessionListener implements HttpSessionListener{
 	@Override
 	public void sessionDestroyed(HttpSessionEvent arg0) {
 		System.out.println("Session destroyed.");
-		
 	}
 
 }

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.daniel.spring.web.dao.CrudDao;
 import com.daniel.spring.web.dao.impl.JdbcOfferDaoImpl;
 import com.daniel.spring.web.model.Offer;
 
@@ -14,7 +13,7 @@ import com.daniel.spring.web.model.Offer;
 @Transactional
 public class OfferService {
 
-	private CrudDao<Offer, Integer> dao;
+	private JdbcOfferDaoImpl dao;
 	
 	@Autowired(required=true)
 	public void setOfferDao(JdbcOfferDaoImpl dao) {
@@ -33,6 +32,10 @@ public class OfferService {
 		return dao.retrieve(id);
 	}
 	
+	public List<Offer> getByUsername(String username) {
+		return dao.retrieve(username);
+	}
+	
 	public List<Offer> getN(int limit) {
 		return dao.list(limit);
 	}
@@ -43,5 +46,9 @@ public class OfferService {
 	
 	public List<Offer> getCurrent() {
 		return dao.list(5);
+	}
+	
+	public int getLastAddedId() {
+		return dao.getLastInsertId();
 	}
 }

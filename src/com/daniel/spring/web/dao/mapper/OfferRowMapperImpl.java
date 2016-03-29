@@ -1,4 +1,4 @@
-package com.daniel.spring.web.dao.impl;
+package com.daniel.spring.web.dao.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.daniel.spring.web.dao.CrudDao;
+import com.daniel.spring.web.dao.mapper.UserRowMapperImpl;
 import com.daniel.spring.web.model.User;
 
 @Repository("userDao")
@@ -86,6 +87,12 @@ public class JdbcUserDaoImpl implements CrudDao<User, String>{
 	public boolean delete(User user) {
 		user.setEnabled(false);
 		return update(user);
+	}
+
+	@Override
+	public int getLastInsertId() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
