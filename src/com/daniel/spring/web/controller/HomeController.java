@@ -13,9 +13,7 @@ import com.daniel.spring.web.service.OfferService;
 @Controller
 @RequestMapping(value="/")
 public class HomeController {
-	
-	private static final Logger logger = LogManager.getLogger(HomeController.class);
-	
+		
 	private OfferService offerService;
 	
 	@Autowired
