@@ -85,7 +85,7 @@ public class OfferTests {
 	
 	@Test
 	public void testAdd() {
-		assertTrue("Offer creation should return true on success.", offerDao.add(offer));
+		assertEquals("Offer creation should return the primary key on success.", Integer.valueOf(1),  offerDao.add(offer));
 	}
 	
 	@Test

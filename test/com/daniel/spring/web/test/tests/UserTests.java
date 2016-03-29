@@ -1,24 +1,22 @@
 package com.daniel.spring.web.test.tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.junit.After;
+import org.hibernate.criterion.Order;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.daniel.spring.web.dao.CrudDao;
+import com.daniel.spring.web.dao.HibernateCrudDao;
 import com.daniel.spring.web.model.Role;
 import com.daniel.spring.web.model.User;
 
@@ -43,12 +41,9 @@ public class UserTests {
 	}
 	
 	private static User user;
-	
+			
 	@Autowired
-	private PasswordEncoder passwordEncoder;
-		
-	@Autowired
-	private CrudDao<User, String> userDao;
+	private HibernateCrudDao<User, String> userDao;
 	
 	@Autowired
 	private DataSource dataSource;
@@ -63,54 +58,69 @@ public class UserTests {
 	
 	@Test
 	public void testAdd() {
-		assertTrue("Offer creation should return true on success.", userDao.add(user));
+		assertEquals("Should return the primary key when added.", user.getUsername(), userDao.add(user));
 	}
 	
 	@Test
 	public void testDelete() {
-		User retrievedUser = null;
 		userDao.add(user);
+		assertEquals("Should insert user", 1, userDao.list().size());
 		
-		for(User u : userDao.list()) {
-			retrievedUser = u;
-		}
-		
-		assertTrue("User deletion should return true on success.", userDao.delete(retrievedUser));
+		userDao.delete(user);
+		assertEquals("Should delete a user", 0, userDao.list().size());
 	}
 	
 	@Test
 	public void testUpdate() {
-		User retrievedUser = null;
-		userDao.add(user);
+		String username = userDao.add(user);
 		
-		for(User u : userDao.list()) {
-			retrievedUser = u;
-		}
-				
-		retrievedUser.setName("Bobby Tables");
-
-		assertTrue("Offer updates should return true on success.", userDao.update(retrievedUser));
+		// Update the name - doesn't support updating the primary key (username) right now!
+		user.setName("Surf Monster");		
+		userDao.update(user);
+		User u = userDao.retrieve(username);
+		assertEquals("Should update a user", "Surf Monster", u.getName());
 	}
 	
 	@Test
 	public void testList() {
+		assertEquals("User database should be empty", 0, userDao.list().size());
 		userDao.add(user);
-		List<User> users = userDao.list();
-				
-		assertEquals("Should list all users in the database", 1, users.size());
+		assertEquals("Should list all users in the database", 1, userDao.list().size());
 	}
 	
 	@Test
 	public void testListWithLimit() {
+		User anotherUser = new User();
+		anotherUser.setName("Funman");
+		anotherUser.setUsername("the_king");
+		anotherUser.setPassword("nopassword");
+		anotherUser.setEmail("daniel@testing.com");
+		anotherUser.setEnabled(true);
+		anotherUser.setAuthority(Role.ROLE_ADMIN);
+		
 		userDao.add(user);
-		int size = 0;
-		List<User> users = userDao.list(size);
-		assertEquals("User count should match the specified limit (if enough rows exist in the table)", size, users.size());
+		userDao.add(anotherUser);
+		
+		assertEquals("Should limit returned rows", 1, userDao.list(1).size());
 	}
 	
-	@After
-	public void destroy() {
-		System.out.println("All done!");
-		System.out.println(userDao.list());
+	@Test
+	public void testOrderByName() {
+		User anotherUser = new User();
+		anotherUser.setName("Z");
+		anotherUser.setUsername("the_king");
+		anotherUser.setPassword("nopassword");
+		anotherUser.setEmail("zaniel@testing.com");
+		anotherUser.setEnabled(true);
+		anotherUser.setAuthority(Role.ROLE_ADMIN);
+		
+		userDao.add(user);
+		userDao.add(anotherUser);
+		
+		List<User> ou = userDao.orderBy(Order.desc("name"));
+		List<User> ou2 = userDao.orderBy(Order.asc("email"));
+		
+		assertEquals("Should order the users by name", anotherUser.getName(), ou.get(0).getName());
+		assertEquals("Should order the users by email", user.getEmail(), ou2.get(0).getEmail());
 	}
 }

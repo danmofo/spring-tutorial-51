@@ -19,9 +19,8 @@
 			<AppenderRef ref="consoleShort" />
 		</Logger>
 		
-		<Logger name="com.daniel.spring.web.service" level="info" additivity="false">
-			<AppenderRef ref="fileShort" />
-			<AppenderRef ref="consoleShort" />
+		<Logger name="com.daniel.spring.web" level="info" additivity="false">
+			<AppenderRef ref="consoleMessageOnly" />
 		</Logger>
 		
 		<Logger name="org.springframework.web" level="info">

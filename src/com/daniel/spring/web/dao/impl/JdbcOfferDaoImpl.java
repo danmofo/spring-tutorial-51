@@ -17,7 +17,7 @@ import com.daniel.spring.web.dao.CrudDao;
 import com.daniel.spring.web.dao.mapper.OfferRowMapperImpl;
 import com.daniel.spring.web.model.Offer;
 
-@Repository("offerDao")
+@Repository
 public class JdbcOfferDaoImpl implements CrudDao<Offer, Integer> {
 	
 	// Probably much better ways to do this, but inline SQL hurts my eyes.

@@ -1,9 +1,14 @@
 package com.daniel.spring.web.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Table;
 
 public class Offer {
 	
+	@Id
 	private int id;
 	
 	@Size(min=10, message="Must be at least {min} characters.")

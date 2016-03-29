@@ -15,7 +15,7 @@ import com.daniel.spring.web.dao.CrudDao;
 import com.daniel.spring.web.dao.mapper.UserRowMapperImpl;
 import com.daniel.spring.web.model.User;
 
-@Repository("userDao")
+@Repository
 public class JdbcUserDaoImpl implements CrudDao<User, String>{
 	
 	public static final String QUERY_INSERT 				= "insert into users (username, authority, name, password, email) values (:username, :authority, :name, :password, :email)";

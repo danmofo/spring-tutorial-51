@@ -11,8 +11,7 @@ import java.util.List;
  */
 
 public interface CrudDao<T, K> {
-	
-	// Create
+		
 	boolean add(T model);
 	
 	// Read

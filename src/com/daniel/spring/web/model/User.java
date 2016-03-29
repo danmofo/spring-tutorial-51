@@ -1,12 +1,22 @@
 package com.daniel.spring.web.model;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 
-public class User {
+@Table(name = "users")
+@Entity
+public class User implements Serializable {
 	
+	private static final long serialVersionUID = 6310376396809757243L;
+
 	@Size(min=1)
+	@Id
 	private String username;
 	
 	@Size(min=3, max=20)
