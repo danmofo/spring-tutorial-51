@@ -1,9 +1,11 @@
 package com.daniel.spring.web.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -32,6 +34,16 @@ public class User implements Serializable {
 	
 	private Role authority = Role.ROLE_USER;
 	private boolean enabled = true;
+	
+	private List<Offer> offers = null;
+	
+	public List<Offer> getOffers() {
+		return offers;
+	}
+	
+	public void setOffers(List<Offer> offers) {
+		this.offers = offers;
+	}
 
 	public String getName() {
 		return name;
@@ -131,6 +143,8 @@ public class User implements Serializable {
 		StringBuilder builder = new StringBuilder();
 		builder.append("User [username=");
 		builder.append(username);
+		builder.append(", offers=");
+		builder.append(offers);
 		builder.append(", email=");
 		builder.append(email);
 		builder.append(", name=");

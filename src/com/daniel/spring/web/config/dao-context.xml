@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:jee="http://www.springframework.org/schema/jee"
-	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
@@ -16,12 +14,12 @@
 		<jee:jndi-lookup jndi-name="jdbc/offer" id="dataSource"
 			expected-type="javax.sql.DataSource">
 		</jee:jndi-lookup>
-		
+
 		<bean id="transactionManager"
 			class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 			<property name="dataSource" ref="dataSource"></property>
 		</bean>
-		
+
 		<!-- docs: https://docs.jboss.org/hibernate/orm/5.0/manual/en-US/html/ch03.html -->
 		<bean id="sessionFactory"
 			class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
@@ -39,8 +37,9 @@
 				</props>
 			</property>
 		</bean>
+		<bean id="exceptionTranslator"
+			class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor">
+		</bean>
 		<tx:annotation-driven proxy-target-class="true" />
 	</beans>
-	
-	
 </beans>

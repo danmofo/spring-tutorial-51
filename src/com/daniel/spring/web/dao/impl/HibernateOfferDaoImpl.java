@@ -8,13 +8,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.daniel.spring.web.dao.HibernateCrudDao;
 import com.daniel.spring.web.model.Offer;
-import com.daniel.spring.web.model.User;
 
 /**
  * Offer DAO using Hibernate.
@@ -30,9 +28,6 @@ public class HibernateOfferDaoImpl implements HibernateCrudDao<Offer, Integer> {
 	
 	@Autowired(required=true)
 	private SessionFactory sessionFactory;
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 	
 	private Session session() {
 		return sessionFactory.getCurrentSession();
@@ -55,7 +50,7 @@ public class HibernateOfferDaoImpl implements HibernateCrudDao<Offer, Integer> {
 	public List<Offer> list(int limit) {
 		logger.info("limit {}", limit);
 		List<Offer> results = session()
-								.createCriteria(User.class)
+								.createCriteria(Offer.class)
 								.setMaxResults(limit)
 								.list();
 		logger.info("HibernateOfferDao list(int limit): {}", results);
@@ -90,7 +85,7 @@ public class HibernateOfferDaoImpl implements HibernateCrudDao<Offer, Integer> {
 	@Override
 	public List<Offer> orderBy(Order order) {
 		List<Offer> results = session()
-				.createCriteria(User.class)
+				.createCriteria(Offer.class)
 				.addOrder(order)
 				.list();
 		

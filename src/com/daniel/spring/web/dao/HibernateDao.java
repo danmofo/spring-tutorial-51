@@ -42,7 +42,7 @@ public class HibernateDao<T, K> implements HibernateCrudDao<T, K>{
 	private Session session() {
 		return sessionFactory.getCurrentSession();
 	}
-	
+		
 	@Override
 	public K add(T model) {
 		// TODO Auto-generated method stub
