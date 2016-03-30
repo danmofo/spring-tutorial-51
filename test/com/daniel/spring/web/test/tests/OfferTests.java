@@ -1,25 +1,25 @@
 package com.daniel.spring.web.test.tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.hibernate.criterion.Order;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.daniel.spring.web.dao.CrudDao;
+import com.daniel.spring.web.dao.HibernateCrudDao;
 import com.daniel.spring.web.model.Offer;
 import com.daniel.spring.web.model.Role;
 import com.daniel.spring.web.model.User;
@@ -56,85 +56,80 @@ public class OfferTests {
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private CrudDao<Offer, Integer> offerDao;
+	private HibernateCrudDao<Offer, Integer> offerDao;
 	
 	@Autowired
-	private CrudDao<User, String> userDao;
+	private HibernateCrudDao<User, String> userDao;
 	
 	@Autowired
 	private DataSource dataSource;
 	
 	@Before
 	public void init() {	
-		NamedParameterJdbcTemplate jdbc = new NamedParameterJdbcTemplate(dataSource);
+		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
 		
-		// Remove all existing users and offers before each test, remove offers first because of the FK.
-		jdbc.update("delete from offer", new MapSqlParameterSource());
-		jdbc.update("delete from users", new MapSqlParameterSource());
+		// Remove all existing users and offers before each test, remove offers first because of the FK constraint.
+		jdbc.update("delete from offer");
+		jdbc.update("delete from users");
 		
 		// Create a dummy user since all offers require a user.
-		MapSqlParameterSource userParams = new MapSqlParameterSource();
-		userParams.addValue("username", user.getUsername());
-		userParams.addValue("password", passwordEncoder.encode(user.getPassword()));
-		userParams.addValue("email", user.getEmail());
-		userParams.addValue("name", user.getName());
-		userParams.addValue("authority", user.getAuthority().toString());		
-		
-		jdbc.update("insert into users (username, password, email, name, authority) values (:username, :password, :email, :name, :authority)", userParams);
+		userDao.add(user);
 	}
 	
 	@Test
 	public void testAdd() {
-		assertEquals("Offer creation should return the primary key on success.", Integer.valueOf(1),  offerDao.add(offer));
+		assertEquals("Should return the primary key when added.", Integer.valueOf(1), offerDao.add(offer));
 	}
 	
 	@Test
 	public void testDelete() {
-		Offer retrievedOffer = null;
 		offerDao.add(offer);
+		assertEquals("Should insert offer", 1, offerDao.list().size());
 		
-		for(Offer o : offerDao.list()) {
-			retrievedOffer = o;
-		}
-		
-		assertTrue("Offer deletion should return true on success.", offerDao.delete(retrievedOffer));
+		offerDao.delete(offer);
+		assertEquals("Should delete an offer", 0, offerDao.list().size());
 	}
 	
 	@Test
 	public void testUpdate() {
-		Offer retrievedOffer = null;
-		offerDao.add(offer);
+		Integer id = offerDao.add(offer);
+		String updatedText = "This offer has been updated!";
 		
-		// I'm almost certain there is a better way to get the offer ID after inserting, whilst still preserving the boolean return
-		// value. This will only work for a single offer in the table.
-		for(Offer o : offerDao.list()) {
-			retrievedOffer = o;
-		}
-				
-		retrievedOffer.setText("This offer has been updated.");
-
-		assertTrue("Offer updates should return true on success.", offerDao.update(retrievedOffer));
+		// Update the name - doesn't support updating the primary key (username) right now!
+		offer.setText(updatedText);		
+		offerDao.update(offer);
+		Offer o = offerDao.retrieve(id);
+		
+		assertEquals("Should update an offer", updatedText, o.getText());
 	}
 	
 	@Test
 	public void testList() {
+		assertEquals("Offer database should be empty", 0, offerDao.list().size());
 		offerDao.add(offer);
-		List<Offer> offers = offerDao.list();
-				
-		assertEquals("Should list all offers in the database", 1, offers.size());
+		assertEquals("Should list all offers in the database", 1, offerDao.list().size());
 	}
 	
 	@Test
 	public void testListWithLimit() {
-		offerDao.add(offer);
-		int size = 0;
-		List<Offer> offers = offerDao.list(size);
-		assertEquals("Offer count should match the specified limit (if enough rows exist in the table)", size, offers.size());
+		Offer o = new Offer(user, "This is another offer.");
+		Offer o2 = new Offer(user, "This is the third offer.");
+		
+		offerDao.add(o);
+		offerDao.add(o2);
+		
+		assertEquals("Should limit returned rows", 1, offerDao.list(1).size());
 	}
 	
-	@After
-	public void destroy() {
-		System.out.println("All done!");
-		System.out.println(offerDao.list());
+	@Test
+	public void testOrderByText() {
+		Offer o = new Offer(user, "ZZ man offer.");
+		
+		offerDao.add(offer);
+		offerDao.add(o);
+		
+		List<Offer> oo = offerDao.orderBy(Order.asc("text"));
+		
+		assertEquals("Should order the offers by text", offer.getText(), oo.get(0));
 	}
 }

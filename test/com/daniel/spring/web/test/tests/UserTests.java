@@ -105,8 +105,8 @@ public class UserTests {
 		anotherUser.setPassword("nopassword");
 		anotherUser.setEmail("daniel@testing.com");
 		anotherUser.setEnabled(true);
-		anotherUser.setAuthority(Role.ROLE_ADMIN)
-		;
+		anotherUser.setAuthority(Role.ROLE_ADMIN);
+		
 		User aFinalUser = new User();
 		aFinalUser.setName("F");
 		aFinalUser.setUsername("dan2");

@@ -13,3 +13,5 @@ select * from users;
 delete from users where username = 'dan';
 
 select last_insert_id();
+
+select version() version;

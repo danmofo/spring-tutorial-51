@@ -8,11 +8,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.daniel.spring.web.dao.HibernateCrudDao;
 import com.daniel.spring.web.model.Offer;
+import com.daniel.spring.web.model.User;
 
 /**
  * Offer DAO using Hibernate.
@@ -29,46 +31,70 @@ public class HibernateOfferDaoImpl implements HibernateCrudDao<Offer, Integer> {
 	@Autowired(required=true)
 	private SessionFactory sessionFactory;
 	
-	public Session session() {
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	private Session session() {
 		return sessionFactory.getCurrentSession();
 	}
 	
 	@Override
 	public Integer add(Offer model) {
-		return 1;
+		logger.info("HibernateOfferDao add(): {}", model);
+
+		return (Integer) session().save(model);
 	}
 
 	@Override
 	public Offer retrieve(Integer key) {
-		// TODO Auto-generated method stub
-		return null;
+		return session().get(Offer.class, key);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Offer> list(int limit) {
-		// TODO Auto-generated method stub
-		return null;
+		logger.info("limit {}", limit);
+		List<Offer> results = session()
+								.createCriteria(User.class)
+								.setMaxResults(limit)
+								.list();
+		logger.info("HibernateOfferDao list(int limit): {}", results);
+		return results;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Offer> list() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Offer> results = session().createQuery("from Offer").list();
+		
+		logger.info("HibernateOfferDao list() {}", results);
+		
+		return results;
 	}
 
 	@Override
 	public void update(Offer model) {
-
+		logger.info("HibernateOfferDao update():");
+		session().update(model);
+		logger.info("Updated offer \"{}\"");
 	}
 
 	@Override
 	public void delete(Offer model) {
-
+		logger.info("HibernateOfferDao delete()");
+		session().delete(model);
+		logger.info("Deleted ID \"{}\" from the database!", model.getId());
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Offer> orderBy(Order order) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Offer> results = session()
+				.createCriteria(User.class)
+				.addOrder(order)
+				.list();
+		
+		logger.info("HibernateOfferDao sortBy(Order order): {}", results);
+		return results;
 	}
 }

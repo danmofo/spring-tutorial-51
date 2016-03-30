@@ -95,6 +95,7 @@ public class HibernateUserDaoImpl implements HibernateCrudDao<User, String> {
 
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> orderBy(Order order) {
 		List<User> results = session()

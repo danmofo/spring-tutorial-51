@@ -2,10 +2,12 @@ package com.daniel.spring.web.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.Table;
-
+@Entity
+@Table(name="offer")
 public class Offer {
 	
 	@Id
@@ -14,6 +16,7 @@ public class Offer {
 	@Size(min=10, message="Must be at least {min} characters.")
 	private String text;
 	
+	@Transient
 	private User user;
 	
 	public Offer() {}
