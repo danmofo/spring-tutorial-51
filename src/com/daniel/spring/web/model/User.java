@@ -9,23 +9,25 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 
+import com.daniel.spring.web.validaton.groups.CreateAccountForm;
+
 @Table(name = "users")
 @Entity
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 6310376396809757243L;
 
-	@Size(min=1)
+	@Size(min=1, groups=CreateAccountForm.class)
 	@Id
 	private String username;
 	
-	@Size(min=3, max=20)
+	@Size(min=3, max=20, groups=CreateAccountForm.class)
 	private String password;
 	
-	@Email
+	@Email(groups=CreateAccountForm.class)
 	private String email;
 		
-	@Size(min=1, max=13, message="Name must be between {min} and {max} characters.")
+	@Size(groups=CreateAccountForm.class, min=1, max=13, message="Name must be between {min} and {max} characters.")
 	private String name;
 	
 	private Role authority = Role.ROLE_USER;

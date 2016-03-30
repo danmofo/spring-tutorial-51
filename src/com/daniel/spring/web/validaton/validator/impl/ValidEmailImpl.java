@@ -1,11 +1,11 @@
-package com.daniel.spring.web.validator.impl;
+package com.daniel.spring.web.validaton.validator.impl;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
-import com.daniel.spring.web.validator.ValidEmail;
+import com.daniel.spring.web.validaton.validator.ValidEmail;
 
 @Deprecated
 public class ValidEmailImpl implements ConstraintValidator<ValidEmail, String> {

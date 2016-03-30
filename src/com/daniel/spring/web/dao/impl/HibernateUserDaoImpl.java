@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +31,12 @@ import com.daniel.spring.web.model.User;
 public class HibernateUserDaoImpl implements HibernateCrudDao<User, String> {
 
 	private static final Logger logger = LogManager.getLogger(HibernateOfferDaoImpl.class);
-	
+		
 	@Autowired(required=true)
 	private SessionFactory sessionFactory;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	private Session session() {
 		return sessionFactory.getCurrentSession();
@@ -40,6 +44,7 @@ public class HibernateUserDaoImpl implements HibernateCrudDao<User, String> {
 	
 	@Override
 	public String add(User model) {
+		model.setPassword(passwordEncoder.encode(model.getPassword()));
 		logger.info("HibernateUserDao add(): {}", model);
 		
 		// todo: add condition for when this doesn't work as intended

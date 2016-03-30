@@ -1,4 +1,4 @@
-package com.daniel.spring.web.validator;
+package com.daniel.spring.web.validaton.validator;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -16,7 +16,7 @@ import javax.validation.Payload;
 @Target({ METHOD, FIELD, ANNOTATION_TYPE })
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = { com.daniel.spring.web.validator.impl.ValidEmailImpl.class })
+@Constraint(validatedBy = { com.daniel.spring.web.validaton.validator.impl.ValidEmailImpl.class })
 public @interface ValidEmail {
 
 	String message() default "Must be a valid email address!";

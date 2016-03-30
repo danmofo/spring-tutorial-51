@@ -1,16 +1,16 @@
 package com.daniel.spring.web.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.daniel.spring.web.model.User;
 import com.daniel.spring.web.service.UserService;
+import com.daniel.spring.web.validaton.groups.CreateAccountForm;
 
 @Controller
 public class AuthenticationController {
@@ -34,7 +34,7 @@ public class AuthenticationController {
 	}
 	
 	@RequestMapping(value="/register", method=RequestMethod.POST)
-	public String handleCreateAccount(@Valid User user, BindingResult result, Model m) {
+	public String handleCreateAccount(@Validated(value=CreateAccountForm.class) User user, BindingResult result, Model m) {
 		
 		// Standard field validation
 		if(result.hasErrors()) {

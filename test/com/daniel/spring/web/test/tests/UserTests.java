@@ -1,22 +1,26 @@
 package com.daniel.spring.web.test.tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.criterion.Order;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.daniel.spring.web.dao.HibernateCrudDao;
+import com.daniel.spring.web.dao.impl.HibernateOfferDaoImpl;
 import com.daniel.spring.web.model.Role;
 import com.daniel.spring.web.model.User;
 
@@ -27,6 +31,8 @@ import com.daniel.spring.web.model.User;
 		"classpath:com/daniel/spring/web/config/security-context.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserTests {
+	
+	private static final Logger logger = LogManager.getLogger(UserTests.class);
 		
 	static {
 		User u = new User();
@@ -44,6 +50,9 @@ public class UserTests {
 			
 	@Autowired
 	private HibernateCrudDao<User, String> userDao;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private DataSource dataSource;
@@ -96,10 +105,19 @@ public class UserTests {
 		anotherUser.setPassword("nopassword");
 		anotherUser.setEmail("daniel@testing.com");
 		anotherUser.setEnabled(true);
-		anotherUser.setAuthority(Role.ROLE_ADMIN);
+		anotherUser.setAuthority(Role.ROLE_ADMIN)
+		;
+		User aFinalUser = new User();
+		aFinalUser.setName("F");
+		aFinalUser.setUsername("dan2");
+		aFinalUser.setPassword("nopassword");
+		aFinalUser.setEmail("daniel@foo.bar.com");
+		aFinalUser.setEnabled(true);
+		aFinalUser.setAuthority(Role.ROLE_ADMIN);
 		
 		userDao.add(user);
 		userDao.add(anotherUser);
+		userDao.add(aFinalUser);
 		
 		assertEquals("Should limit returned rows", 1, userDao.list(1).size());
 	}
@@ -122,5 +140,15 @@ public class UserTests {
 		
 		assertEquals("Should order the users by name", anotherUser.getName(), ou.get(0).getName());
 		assertEquals("Should order the users by email", user.getEmail(), ou2.get(0).getEmail());
+	}
+	
+	@Test
+	public void testEncodePassword() {
+		// user is static so other tests have set the password
+		user.setPassword("password");
+		userDao.add(user);
+		boolean result = passwordEncoder.matches("password", user.getPassword());
+		
+		assertTrue("Should encode user's password", result);
 	}
 }
